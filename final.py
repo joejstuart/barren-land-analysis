@@ -49,23 +49,25 @@ def n(node):
     x = node[0]
     y = node[1]
 
-    if x >= 6 or y >= 5:
-        return []
+    return [(x+1, y), (x, y+1), (x+1, y+1)]
+
+
+def is_bad(node):
+    x = node[0]
+    y = node[1]
 
     for bad in bad_edges:
         p1, p2 = bad
 
         if x >= p1[0] and x+1 <= p2[0]:
             if y >= p1[1] and y+1 <= p2[1]:
-                return []
-
-    return [(x+1, y), (x, y+1), (x+1, y+1)]
+                return 1
 
 
 queue = collections.deque()
 queue.append((0, 0))
 visited = set()
-bad_edges = bad_points(['3065'])
+bad_edges = bad_points(['3045'])
 
 total_collection = []
 while queue:
@@ -82,13 +84,15 @@ while queue:
 
             child_nodes = n(node)
 
-            if child_nodes:
+            if not is_bad(node):
                 new_collection.append(node)
 
             for child_node in child_nodes:
 
                 queue.append(child_node)
-                new_collection.append(child_node)
+
+                if not is_bad(node):
+                    new_collection.append(child_node)
 
             if new_collection:
                 total_collection.append(new_collection)
