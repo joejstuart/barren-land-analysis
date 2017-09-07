@@ -3,10 +3,11 @@ import collections
 
 
 
-dim_x = 6
-dim_y = 5
+dim_x = 2
+dim_y = 3
 
 coordinates = list(product(xrange(dim_x), xrange(dim_y)))
+
 
 matrix = [[0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0],
@@ -32,10 +33,6 @@ def bad_points(bad_edges):
             points.append(point)
 
         bad_collection.append(points)
-
-    print bad_collection
-    exit()
-
 
     return bad_collection
 
@@ -64,16 +61,16 @@ def is_bad(node):
     for bad in bad_edges:
         p1, p2 = bad
 
-        if x >= p1[0] and x+1 <= p2:
-            if y >= p1[1] and y+1 <= p2:
+        if x >= p1[0] and x <= p2[0]:
+            if y >= p1[1] and y <= p2[1]:
                 return 1
     return 0
 
 
 queue = collections.deque()
 visited = set()
-#bad_edges = bad_points(['3041', '0012', '1021'])
-bad_edges = bad_points(['0 292 399 307'])
+bad_edges = bad_points(['0 0 1 2'])
+#bad_edges = bad_points(['0 292 399 307'])
 #bad_edges = bad_points(['0 292'])
 
 total_collection = []
@@ -104,7 +101,7 @@ for start in coordinates:
 
                 for child_node in child_nodes:
 
-                    if not is_bad(node):
+                    if not is_bad(child_node):
                         queue.append(child_node)
 
                 if new_collection:
@@ -115,5 +112,5 @@ for start in coordinates:
 
 
 print len(total_collection)
-print final_collection
+#print final_collection
 print len(final_collection)
