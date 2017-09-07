@@ -1,5 +1,11 @@
+from itertools import product
 import collections
 
+
+dim_x = 6
+dim_y = 5
+
+coordinates = list(product(xrange(dim_x), xrange(dim_y)))
 
 matrix = [[0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0],
@@ -7,27 +13,6 @@ matrix = [[0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0]]
-
-
-def neighbors(node, queue):
-    x = node[0]
-    y = node[1]
-
-    if x >= 6 or y >= 5:
-        return queue
-
-    for bad in bad_edges:
-        p1, p2 = bad
-
-        if x >= p1[0] and x+1 <= p2[0]:
-            if y >= p1[1] and y+1 <= p2[1]:
-                return queue
-
-    queue.append((x+1, y))
-    queue.append((x, y+1))
-    queue.append((x+1, y+1))
-
-    return queue
 
 
 def bad_points(bad_edges):
@@ -62,40 +47,44 @@ def is_bad(node):
         if x >= p1[0] and x+1 <= p2[0]:
             if y >= p1[1] and y+1 <= p2[1]:
                 return 1
+    return 0
 
 
 queue = collections.deque()
-queue.append((0, 0))
 visited = set()
-bad_edges = bad_points(['3045'])
+bad_edges = bad_points(['3041', '0012', '1021'])
 
 total_collection = []
-while queue:
 
-    node = queue.popleft()
+for start in coordinates:
 
-    if not (node[0] >= 6 or node[1] >= 5):
+    queue.append(start)
 
-        if node not in visited:
+    while queue:
 
-            new_collection = []
+        node = queue.popleft()
 
-            visited.add(node)
+        if not (node[0] >= dim_x or node[1] >= dim_y):
 
-            child_nodes = n(node)
+            if node not in visited:
 
-            if not is_bad(node):
-                new_collection.append(node)
+                new_collection = []
 
-            for child_node in child_nodes:
+                visited.add(node)
 
-                queue.append(child_node)
+                child_nodes = n(node)
 
                 if not is_bad(node):
-                    new_collection.append(child_node)
+                    new_collection.append(node)
 
-            if new_collection:
-                total_collection.append(new_collection)
+                for child_node in child_nodes:
+
+                    if not is_bad(node):
+                        queue.append(child_node)
+                        new_collection.append(child_node)
+
+                if new_collection:
+                    total_collection.append(new_collection)
 
 
 print len(total_collection)
