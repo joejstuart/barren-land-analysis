@@ -20,16 +20,21 @@ def pair(points):
     p = iter(points)
     return izip(p, p)
 
-
+# [[(0, 0), (1, 5)], [(0, 0), (1, 2)], [(1, 0), (2, 1)]]
 def bad_points(bad_edges):
     bad_collection = []
 
     for bad in bad_edges:
         points = []
         for x, y in pair(bad.split()):
-            points.append([int(x), int(y)])
+            point = (int(x), int(y))
 
-        bad_collection.extend(points)
+            points.append(point)
+
+        bad_collection.append(points)
+
+    print bad_collection
+    exit()
 
 
     return bad_collection
@@ -59,11 +64,8 @@ def is_bad(node):
     for bad in bad_edges:
         p1, p2 = bad
 
-        print p1, p2
-        exit()
-
-        if x >= p1 and x+1 <= p2:
-            if y >= p1 and y+1 <= p2:
+        if x >= p1[0] and x+1 <= p2:
+            if y >= p1[1] and y+1 <= p2:
                 return 1
     return 0
 
@@ -71,8 +73,8 @@ def is_bad(node):
 queue = collections.deque()
 visited = set()
 #bad_edges = bad_points(['3041', '0012', '1021'])
-#bad_edges = bad_points(['0 292 399 307'])
-bad_edges = bad_points(['0 0 1 1'])
+bad_edges = bad_points(['0 292 399 307'])
+#bad_edges = bad_points(['0 292'])
 
 total_collection = []
 final_collection = []
