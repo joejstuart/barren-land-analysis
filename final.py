@@ -3,41 +3,27 @@ import collections
 
 
 
-dim_x = 2
-dim_y = 3
-
-coordinates = list(product(xrange(dim_x), xrange(dim_y)))
-
-
-matrix = [[0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0],
-          [0, 0, 0, 0, 0, 0, 0]]
-
-
 def pair(points):
     p = iter(points)
     return izip(p, p)
 
-# [[(0, 0), (1, 5)], [(0, 0), (1, 2)], [(1, 0), (2, 1)]]
-def bad_points(bad_edges):
-    bad_collection = []
 
-    for bad in bad_edges:
+def barren_points(barren_edges):
+    barren_collection = []
+
+    for barren in barren_edges:
         points = []
-        for x, y in pair(bad.split()):
+        for x, y in pair(barren.split()):
             point = (int(x), int(y))
 
             points.append(point)
 
-        bad_collection.append(points)
+        barren_collection.append(points)
 
-    return bad_collection
+    return barren_collection
 
 
-def n(node):
+def neighbors(node):
     x = node[0]
     y = node[1]
 
@@ -54,7 +40,7 @@ def n(node):
         return [(x-1, y), (x, y-1), (x, y+1), (x+1, y)]
 
 
-def is_bad(node):
+def is_bad(node, bad_edges):
     x = node[0]
     y = node[1]
 
@@ -67,50 +53,61 @@ def is_bad(node):
     return 0
 
 
-queue = collections.deque()
-visited = set()
-bad_edges = bad_points(['0 0 1 2'])
-#bad_edges = bad_points(['0 292 399 307'])
-#bad_edges = bad_points(['0 292'])
+def bfs(height, width, barren):
+    coordinates = list(product(xrange(width), xrange(height)))
 
-total_collection = []
-final_collection = []
+    queue = collections.deque()
+    visited = set()
 
-for start in coordinates:
+    total_collection = []
+    final_collection = []
 
-    queue.append(start)
+    for start in coordinates:
 
-    barren_land = []
+        queue.append(start)
 
-    while queue:
+        barren_land = []
 
-        node = queue.popleft()
+        while queue:
 
-        if not (node[0] >= dim_x or node[1] >= dim_y):
+            node = queue.popleft()
 
-            if node not in visited:
+            if not (node[0] >= width or node[1] >= height):
 
-                new_collection = []
+                if node not in visited:
 
-                visited.add(node)
+                    new_collection = []
 
-                child_nodes = n(node)
+                    visited.add(node)
 
-                if not is_bad(node):
-                    new_collection.append(node)
+                    child_nodes = neighbors(node)
 
-                for child_node in child_nodes:
+                    if not is_bad(node, barren):
+                        new_collection.append(node)
 
-                    if not is_bad(child_node):
-                        queue.append(child_node)
+                    for child_node in child_nodes:
 
-                if new_collection:
-                    total_collection.append(new_collection)
-                    barren_land.extend(new_collection)
-    if barren_land:
-        final_collection.append(barren_land)
+                        if not is_bad(child_node, barren):
+                            queue.append(child_node)
+
+                    if new_collection:
+                        total_collection.append(new_collection)
+                        barren_land.extend(new_collection)
+        if barren_land:
+            final_collection.append(barren_land)
+
+    return final_collection
 
 
-print len(total_collection)
-#print final_collection
-print len(final_collection)
+def fertile_land(height, width, barren_land):
+
+    land = bfs(height, width, barren_land)
+
+    if len(land) == 0:
+        return 0
+
+    total_area = [len(area) for area in land]
+
+    total_area.sort()
+
+    return total_area
