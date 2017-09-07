@@ -13,7 +13,7 @@ class BarrenLandTest(unittest.TestCase):
         self.assertEqual(land, '0')
 
     def test_smaller_area(self):
-        land = barrenLand.fertile_land(5, 6, ['2 0 4 5'])
+        land = barrenLand.fertile_land(5, 6, ['2 0 4 4'])
         self.assertEqual(land, '10 5')
 
 
@@ -22,7 +22,15 @@ class BarrenLandTest(unittest.TestCase):
         self.assertEquals(land, '29')
 
     def test_whole_left_edge(self):
-        land = barrenLand.fertile_land(5, 6, ['0 0 0 5'])
+        land = barrenLand.fertile_land(5, 6, ['0 0 0 4'])
         self.assertEquals(land, '25')
+
+    def test_whole_right_edge(self):
+        land = barrenLand.fertile_land(5, 6, ['5 0 5 4'])
+        self.assertEquals(land, '25')
+
+    def test_no_barren_land(self):
+        land = barrenLand.fertile_land(5, 6, [])
+        self.assertEquals(land, '30')
 
 
