@@ -99,15 +99,17 @@ def bfs(height, width, barren):
     return final_collection
 
 
-def fertile_land(height, width, barren_land):
+def fertile_land(height, width, barren_edges):
+
+    barren_land = barren_points(barren_edges)
 
     land = bfs(height, width, barren_land)
 
     if len(land) == 0:
-        return 0
+        return '0'
 
-    total_area = [len(area) for area in land]
+    total_area = [str(len(area)) for area in land]
 
     total_area.sort()
 
-    return total_area
+    return ' '.join(total_area)
