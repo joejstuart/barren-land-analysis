@@ -1,5 +1,6 @@
-from itertools import product
+from itertools import product, izip
 import collections
+
 
 
 dim_x = 6
@@ -15,17 +16,21 @@ matrix = [[0, 0, 0, 0, 0, 0, 0],
           [0, 0, 0, 0, 0, 0, 0]]
 
 
+def pair(points):
+    p = iter(points)
+    return izip(p, p)
+
+
 def bad_points(bad_edges):
     bad_collection = []
 
     for bad in bad_edges:
-        x = bad[:2]
-        y = bad[2:4]
+        points = []
+        for x, y in pair(bad.split()):
+            points.append([int(x), int(y)])
 
-        p1 = (int(x[0]), int(x[1]))
-        p2 = (int(y[0]), int(y[1]))
+        bad_collection.extend(points)
 
-        bad_collection.append([p1, p2])
 
     return bad_collection
 
@@ -34,7 +39,17 @@ def n(node):
     x = node[0]
     y = node[1]
 
-    return [(x+1, y), (x, y+1), (x+1, y+1)]
+    if x == 0 and y == 0:
+        return [(x+1, y), (x, y+1)]
+
+    if x > 0 and y == 0:
+        return [(x-1, y), (x+1, y), (x, y+1)]
+
+    if x == 0 and y > 0:
+        return [(x, y-1), (x+1, y), (x, y+1)]
+
+    if x > 0 and y > 0:
+        return [(x-1, y), (x, y-1), (x, y+1), (x+1, y)]
 
 
 def is_bad(node):
@@ -44,21 +59,29 @@ def is_bad(node):
     for bad in bad_edges:
         p1, p2 = bad
 
-        if x >= p1[0] and x+1 <= p2[0]:
-            if y >= p1[1] and y+1 <= p2[1]:
+        print p1, p2
+        exit()
+
+        if x >= p1 and x+1 <= p2:
+            if y >= p1 and y+1 <= p2:
                 return 1
     return 0
 
 
 queue = collections.deque()
 visited = set()
-bad_edges = bad_points(['3041', '0012', '1021'])
+#bad_edges = bad_points(['3041', '0012', '1021'])
+#bad_edges = bad_points(['0 292 399 307'])
+bad_edges = bad_points(['0 0 1 1'])
 
 total_collection = []
+final_collection = []
 
 for start in coordinates:
 
     queue.append(start)
+
+    barren_land = []
 
     while queue:
 
@@ -81,11 +104,14 @@ for start in coordinates:
 
                     if not is_bad(node):
                         queue.append(child_node)
-                        new_collection.append(child_node)
 
                 if new_collection:
                     total_collection.append(new_collection)
+                    barren_land.extend(new_collection)
+    if barren_land:
+        final_collection.append(barren_land)
 
 
 print len(total_collection)
-print total_collection
+print final_collection
+print len(final_collection)
