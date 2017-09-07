@@ -2,7 +2,6 @@ from itertools import product, izip
 import collections
 
 
-
 def pair(points):
     p = iter(points)
     return izip(p, p)
