@@ -8,6 +8,16 @@ def pair(points):
 
 
 def barren_points(barren_edges):
+    """
+    Parses the barren points input into a list of tuples
+
+    Args:
+        param1: (string) A string containing the
+        bottom left and top right coordinates
+
+    Returns:
+        (list)
+    """
     barren_collection = []
 
     for barren in barren_edges:
@@ -23,6 +33,15 @@ def barren_points(barren_edges):
 
 
 def neighbors(node):
+    """
+    Find the points connected to a node
+
+    Args:
+        param1: (tuple) The coordinates of the node
+
+    Returns:
+        (list)
+    """
     x = node[0]
     y = node[1]
 
@@ -48,7 +67,7 @@ def is_bad(node, bad_edges):
         param2 (list) The list of barren edges
 
     Returns:
-         bool
+         (bool)
     """
     x = node[0]
     y = node[1]
