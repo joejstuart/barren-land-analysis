@@ -25,8 +25,4 @@ class BarrenLandTest(unittest.TestCase):
         land = barrenLand.fertile_land(5, 6, ['0 0 0 5'])
         self.assertEquals(land, '25')
 
-    def test_whole_right_edge(self):
-        land = barrenLand.fertile_land(5, 6, ['6 0 6 5'])
-        self.assertEquals(land, '25')
-
 
