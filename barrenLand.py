@@ -59,7 +59,6 @@ def bfs(height, width, barren):
     queue = collections.deque()
     visited = set()
 
-    total_collection = []
     final_collection = []
 
     for start in coordinates:
@@ -91,7 +90,7 @@ def bfs(height, width, barren):
                             queue.append(child_node)
 
                     if new_collection:
-                        total_collection.append(new_collection)
+
                         barren_land.extend(new_collection)
         if barren_land:
             final_collection.append(barren_land)
