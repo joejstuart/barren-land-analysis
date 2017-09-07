@@ -40,6 +40,16 @@ def neighbors(node):
 
 
 def is_bad(node, bad_edges):
+    """
+    Check if a node matches barren land
+
+    Args:
+        param1 (tuple) The node to check against all barren land
+        param2 (list) The list of barren edges
+
+    Returns:
+         bool
+    """
     x = node[0]
     y = node[1]
 
@@ -53,17 +63,27 @@ def is_bad(node, bad_edges):
 
 
 def bfs(height, width, barren):
+    """
+    Traverse all coordinates looking for connected components
+
+    Args:
+        param1: (int) The height of the graph
+        param2: (int) The width of the graph
+        param3: (list) The coordinates of the barren land
+
+    Returns:
+        (list) A list containing the connected components
+
+    """
     coordinates = list(product(xrange(width), xrange(height)))
 
     queue = collections.deque()
     visited = set()
-
     final_collection = []
 
     for start in coordinates:
 
         queue.append(start)
-
         barren_land = []
 
         while queue:
@@ -71,25 +91,20 @@ def bfs(height, width, barren):
             node = queue.popleft()
 
             if not (node[0] >= width or node[1] >= height):
-
                 if node not in visited:
-
                     new_collection = []
-
                     visited.add(node)
-
-                    child_nodes = neighbors(node)
 
                     if not is_bad(node, barren):
                         new_collection.append(node)
 
+                    child_nodes = neighbors(node)
                     for child_node in child_nodes:
 
                         if not is_bad(child_node, barren):
                             queue.append(child_node)
 
                     if new_collection:
-
                         barren_land.extend(new_collection)
         if barren_land:
             final_collection.append(barren_land)
